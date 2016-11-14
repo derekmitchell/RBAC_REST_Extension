@@ -1,0 +1,51 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment {  deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            pom.project {
+                name 'ACE Rest Servers'
+                packaging 'jar'
+                description 'ACE REst is an extension for the Appdynamics Controller REST Services.'
+                url 'https://github.com/organizations/Appdynamics'
+
+                scm {
+                    url 'scm:git@github.com:Appdynamics/hadoop-monitoring-extension.git'
+                    connection 'scm:git@github.com:Appdynamics/hadoop-monitoring-extension.git'
+                    developerConnection 'scm:git@github.com:Appdynamics/hadoop-monitoring-extension.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'stefan.marx'
+                        name 'Yennick Trevels'
+                    }
+                    developer {
+                        id 'stevendick'
+                        name 'Steven Dick'
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+apply plugin:'java'
+apply from: file("../publish.gradle")
+
+dependencies {
+      compile project(':rest_api')
+      compile 'com.sun.jersey:jersey-core:1.17.1'
+
+      compile 'com.sun.jersey:jersey-json:1.17.1'
+      compile 'com.sun.jersey:jersey-client:1.17.1'
+
+    compile 'com.appdynamics:controller-api:4.1.10.3'
+
+//    testCompile "junit:junit:4.11"
+}
+
+
+
+compileJava {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+    options.bootClasspath = "/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar"
+}
+
+jar {
+    archiveName='ace_'+Character.toUpperCase(archiveName.charAt(0)) + archiveName.substring(1)
+}

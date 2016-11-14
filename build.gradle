@@ -1,0 +1,124 @@
+allprojects {
+    apply plugin: 'idea'
+
+    group = 'com.appdynamics.ace.rest'
+    version = '1.3'
+
+    idea{
+	    module {
+        	excludeDirs += file('gradle')
+        	excludeDirs += file('.idea')
+        	//excludeDirs.remove(file("build"))
+    	}
+	}
+
+    repositories {
+    mavenCentral()
+        maven {
+            url "https://raw.github.com/Appdynamics/artifact-library/master/repo/"
+        }
+        maven {
+            url "file:///vlab/maven/private-artifact-library/repo/"
+        }
+        maven {
+            url "file:///Users/derek.mitchell/.m2/repository/"
+        }
+    }
+}
+
+configurations {
+    base
+    release
+    debugRelease
+}
+
+dependencies {
+    release project (':rest_util')
+    release project (':rest_api')
+   // release project (':rest_server')
+
+    debugRelease project (':rest_serverDebug')
+    debugRelease project (':rest_util')
+    debugRelease project (':rest_api')
+
+}
+
+
+task packageServer(type: Zip) {
+    from configurations.base
+    from configurations.release
+
+    include 'ace_*.jar'
+    // Replace with better configuration Handling (MayBe)
+    destinationDir = file("$buildDir/zips")
+    baseName ='ACE_RestServer'
+    extension = 'zip'
+    version = project.version
+    duplicatesStrategy = 'exclude'
+}
+
+task packageAllServer(type: Zip) {
+    from configurations.base
+    from configurations.release
+    from configurations.debugRelease
+
+    include 'groovy-all*.jar'
+    include 'ace_*.jar'
+
+    // Replace with better configuration Handling (MayBe)
+    destinationDir = file("$buildDir/zips")
+    baseName ='ACE_RestServer_ALL'
+    extension = 'zip'
+    version = project.version
+    duplicatesStrategy = 'exclude'
+}
+
+task packageDebugServer(type: Zip) {
+    from configurations.base
+    from configurations.debugRelease
+
+    include 'ace_*.jar'
+    include 'groovy-all*.jar'
+
+    // Replace with better configuration Handling (MayBe)
+    destinationDir = file("$buildDir/zips")
+    baseName ='ACE_RestServerDebug'
+    extension = 'zip'
+    version = project.version
+    duplicatesStrategy = 'exclude'
+}
+
+task clean << {
+    delete('build')
+}
+
+task build (dependsOn: packageServer) << {}
+build.dependsOn(packageDebugServer)
+build.dependsOn(packageAllServer)
+
+
+// Server Code Publish
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        mavenJava (MavenPublication) {
+            artifactId 'rest_server'
+
+            artifact packageServer {
+                extension "zip"
+            }
+        }
+
+    }
+    repositories {
+        maven {
+
+            url "file:////vlab/maven/artifact-library/repo"
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}

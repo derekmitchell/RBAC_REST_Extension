@@ -1,0 +1,6 @@
+build
+out
+.gradletasknamecache
+*.iws
+.gradle/
+.idea/

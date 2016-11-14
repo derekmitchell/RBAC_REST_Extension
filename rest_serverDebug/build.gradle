@@ -1,0 +1,44 @@
+apply plugin:'java'
+apply from: file("../publish.gradle")
+
+dependencies {
+    compile 'com.sun.jersey:jersey-core:1.17.1'
+
+    compile 'com.sun.jersey:jersey-json:1.17.1'
+
+    compile 'javax.servlet:javax.servlet-api:3.0.1'
+
+    compile 'com.sun.xml.ws:jaxws-rt:2.2.9-b14002'
+    compile 'org.glassfish.main.ejb:javax.ejb:3.1.2.2'
+
+    compile project(':rest_api')
+    compile project(':rest_util')
+    compile project(':rest_serverDebugApi')
+
+    compile 'com.appdynamics:controller-api:4.1.10.3'
+
+    testCompile "junit:junit:4.11"
+
+    compile "org.codehaus.groovy:groovy-all:2.1.9"
+}
+
+
+
+compileJava {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+    options.bootClasspath = "/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar"
+}
+
+jar {
+    archiveName='ace_'+Character.toUpperCase(archiveName.charAt(0)) + archiveName.substring(1)
+}
+
+
+
+
+/// TEST DEPENDENCIES
+test.useTestNG()
+dependencies {
+    testCompile "org.testng:testng:6.8.1"
+}

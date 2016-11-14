@@ -1,0 +1,31 @@
+apply plugin:'java'
+apply from: file("../publish.gradle")
+
+dependencies {
+    compile 'commons-codec:commons-codec:1.3'
+    compile 'com.sun.jersey:jersey-core:1.17.1'
+    compile 'com.sun.jersey:jersey-server:1.17.1'
+    compile 'com.sun.jersey:jersey-servlet:1.17.1'
+    compile 'com.sun.jersey:jersey-json:1.17.1'
+    compile 'com.sun.jersey:jersey-client:1.17.1'
+
+    compile 'javax.servlet:javax.servlet-api:3.0.1'
+
+    compile 'com.sun.xml.ws:jaxws-rt:2.2.9-b14002'
+   // compile 'com.wordnik:swagger-jersey-jaxrs_2.10:1.3.0'
+
+    //compile project(":rest_api")
+
+
+//    testCompile "junit:junit:4.11"
+}
+
+compileJava {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+    options.bootClasspath = "/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar"
+}
+
+jar {
+    archiveName='ace_'+Character.toUpperCase(archiveName.charAt(0)) + archiveName.substring(1)
+}

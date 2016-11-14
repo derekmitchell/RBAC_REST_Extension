@@ -1,0 +1,20 @@
+apply plugin: 'maven-publish'
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId 'rest-'+project.name
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username 'aceDeployment'
+                password 'ac3Deplo1'
+            }
+            url "http://maven.apmcentral.org/nexus/content/repositories/ace/"
+        }
+    }
+}

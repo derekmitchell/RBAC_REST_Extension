@@ -1,0 +1,17 @@
+apply plugin: 'maven-publish'
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId project.name
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+
+            url "file:////vlab/maven/artifact-library/repo"
+        }
+    }
+}
